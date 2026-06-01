@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Housing Search App - Abidjan Rental Finder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🏠 Housing Search App</h1>
+                <p>Trouvez votre logement idéal à Abidjan</p>
+            </div>
+        </header>
+
+        <!-- Search Form -->
+        <section class="search-section">
+            <div class="search-container">
+                <h2>Paramètres de Recherche</h2>
+                
+                <div class="form-grid">
+                    <!-- Property Type -->
+                    <div class="form-group">
+                        <label for="propertyType">Type de Propriété</label>
+                        <select id="propertyType">
+                            <option value="">-- Sélectionner --</option>
+                            <option value="studio">Studio</option>
+                            <option value="1piece">1 Pièce</option>
+                            <option value="2pieces">2 Pièces</option>
+                            <option value="3pieces">3 Pièces</option>
+                            <option value="4pieces">4 Pièces+</option>
+                        </select>
+                    </div>
+
+                    <!-- Commune/Location -->
+                    <div class="form-group">
+                        <label for="commune">Commune d'Abidjan</label>
+                        <select id="commune">
+                            <option value="">-- Sélectionner --</option>
+                            <option value="Abobo">Abobo</option>
+                            <option value="Adjamé">Adjamé</option>
+                            <option value="Attécoubé">Attécoubé</option>
+                            <option value="Cocody">Cocody</option>
+                            <option value="Koumassi">Koumassi</option>
+                            <option value="Marcory">Marcory</option>
+                            <option value="Plateau">Plateau</option>
+                            <option value="Port-Bouët">Port-Bouët</option>
+                            <option value="Treichville">Treichville</option>
+                            <option value="Yopougon">Yopougon</option>
+                            <option value="San Pédro">San Pédro</option>
+                            <option value="Bingerville">Bingerville</option>
+                        </select>
+                    </div>
+
+                    <!-- Min Price -->
+                    <div class="form-group">
+                        <label for="minPrice">Prix Minimum (FCFA/mois)</label>
+                        <input type="number" id="minPrice" placeholder="Ex: 50000" min="0">
+                    </div>
+
+                    <!-- Max Price -->
+                    <div class="form-group">
+                        <label for="maxPrice">Prix Maximum (FCFA/mois)</label>
+                        <input type="number" id="maxPrice" placeholder="Ex: 500000" min="0">
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button id="searchBtn" class="btn btn-primary">🔍 Rechercher</button>
+                    <button id="resetBtn" class="btn btn-secondary">↻ Réinitialiser</button>
+                </div>
+
+                <p class="info-text">Les résultats affichent uniquement les annonces de moins d'un mois</p>
+            </div>
+        </section>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="loading-spinner hidden">
+            <div class="spinner"></div>
+            <p>Recherche en cours...</p>
+        </div>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <div id="resultsContainer" class="results-container">
+                <div class="no-results">
+                    <p>Veuillez effectuer une recherche pour voir les résultats</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Housing Search App | Trouvez votre maison parfaite à Abidjan</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
