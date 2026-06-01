@@ -21,6 +21,7 @@
                     <button id="favoritesBtn" class="btn-icon" title="Favoris">❤️</button>
                     <button id="historyBtn" class="btn-icon" title="Historique">⏰</button>
                     <button id="notificationsBtn" class="btn-icon" title="Notifications">🔔</button>
+                    <button id="dorksBtn" class="btn-icon" title="Google Dorks">🔍</button>
                 </div>
             </div>
         </header>
@@ -43,7 +44,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2>⏰ Historique de Recherche</h2>
-                    <button class="modal-close" onclick="closeHistoryModal()">&times;</button>
+                    <button class="modal-close" onclick="closeHistoryModal()">×</button>
                 </div>
                 <div id="historyList" class="modal-body">
                     <p style="color: var(--text-light);">Aucun historique</p>
@@ -56,7 +57,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h2>🔔 Paramètres de Notifications</h2>
-                    <button class="modal-close" onclick="closeNotificationsModal()">&times;</button>
+                    <button class="modal-close" onclick="closeNotificationsModal()">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -78,6 +79,22 @@
                         </label>
                     </div>
                     <button class="btn btn-primary" onclick="saveNotificationSettings()">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Google Dorks Modal -->
+        <div id="dorksModal" class="modal hidden">
+            <div class="modal-content modal-large">
+                <div class="modal-header">
+                    <h2>🔍 Recherches Google Avancées</h2>
+                    <button class="modal-close" onclick="closeDorksModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <p class="dorks-info">Cliquez sur une plateforme pour lancer une recherche avec vos critères actuels</p>
+                    <div id="dorksContainer" class="dorks-container">
+                        <!-- Dorks will be generated here -->
+                    </div>
                 </div>
             </div>
         </div>

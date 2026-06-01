@@ -472,6 +472,58 @@ let notificationSettings = JSON.parse(localStorage.getItem('notificationSettings
     matches: true
 };
 
+// GOOGLE DORKS GENERATOR SYSTEM
+const googleDorksDatabase = {
+    facebook: {
+        name: "Facebook Marketplace",
+        icon: "👍",
+        baseUrl: "https://www.facebook.com/search/homes/",
+        generator: (criteria) => `https://www.facebook.com/search/?q=location+${criteria.commune}+logement+${criteria.type}&t=page`
+    },
+    tiktok: {
+        name: "TikTok Immobilier",
+        icon: "🎵",
+        baseUrl: "https://www.tiktok.com/search/video",
+        generator: (criteria) => `https://www.tiktok.com/search?q=location%20${criteria.commune}%20${criteria.type}%20abidjan&t=video`
+    },
+    instagram: {
+        name: "Instagram Immobilier",
+        icon: "📷",
+        baseUrl: "https://www.instagram.com/explore/tags/",
+        generator: (criteria) => `https://www.instagram.com/explore/tags/location${criteria.commune}abidjan/?hl=fr`
+    },
+    google: {
+        name: "Google Search",
+        icon: "🔍",
+        baseUrl: "https://www.google.com/search",
+        generator: (criteria) => `https://www.google.com/search?q=logement+location+${criteria.commune}+abidjan+${criteria.type}+${criteria.minPrice}-${criteria.maxPrice}`
+    },
+    immobilierci: {
+        name: "Immobilier.ci",
+        icon: "🏢",
+        baseUrl: "https://immobilier.ci",
+        generator: (criteria) => `https://immobilier.ci/search?type=${criteria.type}&location=${criteria.commune}&minPrice=${criteria.minPrice}&maxPrice=${criteria.maxPrice}`
+    },
+    twitter: {
+        name: "Twitter/X Immobilier",
+        icon: "𝕏",
+        baseUrl: "https://twitter.com/search",
+        generator: (criteria) => `https://twitter.com/search?q=location%20${criteria.commune}%20logement%20abidjan&f=live`
+    },
+    whatsapp: {
+        name: "WhatsApp Business",
+        icon: "💬",
+        baseUrl: "https://wa.me",
+        generator: (criteria) => `https://wa.me/?text=Je%20cherche%20un%20logement%20${criteria.type}%20à%20${criteria.commune}%20Abidjan`
+    },
+    avito: {
+        name: "Avito.ci",
+        icon: "🛍️",
+        baseUrl: "https://avito.ci",
+        generator: (criteria) => `https://avito.ci/ci?q=logement+${criteria.commune}&ps=1`
+    }
+};
+
 // Utility functions
 function getDaysAgo(date) {
     const now = new Date();
@@ -503,6 +555,53 @@ function getPropertyTypeDisplay(type) {
     return types[type] || type;
 }
 
+// GOOGLE DORKS FUNCTIONS
+function generateGoogleDorks() {
+    const propertyType = document.getElementById('propertyType').value || 'logement';
+    const commune = document.getElementById('commune').value || 'Abidjan';
+    const minPrice = parseInt(document.getElementById('minPrice').value) || 0;
+    const maxPrice = parseInt(document.getElementById('maxPrice').value) || 1000000;
+
+    const criteria = {
+        type: propertyType,
+        commune: commune,
+        minPrice: minPrice,
+        maxPrice: maxPrice
+    };
+
+    let dorksHTML = '';
+
+    for (const [key, platform] of Object.entries(googleDorksDatabase)) {
+        const searchUrl = platform.generator(criteria);
+        dorksHTML += `
+            <div class="dork-item">
+                <div class="dork-info">
+                    <span class="dork-icon">${platform.icon}</span>
+                    <div class="dork-details">
+                        <h4>${platform.name}</h4>
+                        <p class="dork-criteria">📍 ${commune} • 🏠 ${propertyType} • 💰 ${minPrice}-${maxPrice} FCFA</p>
+                    </div>
+                </div>
+                <a href="${searchUrl}" target="_blank" class="btn-small btn-view">🔗 Chercher</a>
+            </div>
+        `;
+    }
+
+    return dorksHTML;
+}
+
+function openDorksModal() {
+    const modal = document.getElementById('dorksModal');
+    const container = document.getElementById('dorksContainer');
+    container.innerHTML = generateGoogleDorks();
+    modal.classList.remove('hidden');
+}
+
+function closeDorksModal() {
+    document.getElementById('dorksModal').classList.add('hidden');
+}
+
+// FAVORIS FUNCTIONS
 function toggleFavorite(listingId) {
     const index = favorites.findIndex(fav => fav === listingId);
     if (index > -1) {
@@ -579,8 +678,10 @@ function createResultCard(listing) {
                 </small>
 
                 <div class="result-card-footer">
-                    <a href="${listing.link}" target="_blank" class="btn-small btn-view">🔗 Voir l'annonce</a>
-                    <button class="btn-small btn-share" onclick="shareResult('${listing.title}', '${listing.commune}', '${formatPrice(listing.price)}')">
+                    <a href="${listing.link}" target="_blank" class="btn-small btn-view">
+                        🔗 Voir l'annonce
+                    </a>
+                    <button class="btn-small btn-share" onclick="shareResult('${listing.title}', '${listing.commune}', '${formatPrice(listing.price)}')">  
                         📤 Partager
                     </button>
                 </div>
@@ -662,6 +763,7 @@ function displayResults(results) {
             <div class="no-results">
                 <p>😕 Aucun résultat ne correspond à votre recherche.</p>
                 <p style="margin-top: 10px; font-size: 0.9em;">Essayez de modifier vos critères de recherche.</p>
+                <p style="margin-top: 10px; font-size: 0.9em;">💡 Vous pouvez aussi utiliser <strong>Google Dorks</strong> pour élargir votre recherche sur d'autres plateformes</p>
             </div>
         `;
         return;
@@ -712,7 +814,7 @@ function resetForm() {
     `;
 }
 
-// Modal functions
+// MODAL FUNCTIONS
 function openFavoritesModal() {
     const modal = document.getElementById('favoritesModal');
     const favoritesList = document.getElementById('favoritesList');
@@ -820,6 +922,7 @@ document.getElementById('darkModeToggle').addEventListener('click', toggleDarkMo
 document.getElementById('favoritesBtn').addEventListener('click', openFavoritesModal);
 document.getElementById('historyBtn').addEventListener('click', openHistoryModal);
 document.getElementById('notificationsBtn').addEventListener('click', openNotificationsModal);
+document.getElementById('dorksBtn').addEventListener('click', openDorksModal);
 document.getElementById('advancedFiltersBtn').addEventListener('click', function() {
     document.getElementById('advancedFilters').classList.toggle('hidden');
 });
