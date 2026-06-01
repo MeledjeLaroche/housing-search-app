@@ -5,16 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Housing Search App - Abidjan Rental Finder</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- Header -->
+        <!-- Header with Navigation -->
         <header class="header">
-            <div class="header-content">
-                <h1>🏠 Housing Search App</h1>
-                <p>Trouvez votre logement idéal à Abidjan</p>
+            <div class="header-top">
+                <div class="header-content">
+                    <h1>🏠 Housing Search App</h1>
+                    <p>Trouvez votre logement idéal à Abidjan</p>
+                </div>
+                <div class="header-controls">
+                    <button id="darkModeToggle" class="btn-icon" title="Mode sombre">🌙</button>
+                    <button id="favoritesBtn" class="btn-icon" title="Favoris">❤️</button>
+                    <button id="historyBtn" class="btn-icon" title="Historique">⏰</button>
+                    <button id="notificationsBtn" class="btn-icon" title="Notifications">🔔</button>
+                </div>
             </div>
         </header>
+
+        <!-- Favorites Modal -->
+        <div id="favoritesModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>❤️ Mes Favoris</h2>
+                    <button class="modal-close" onclick="closeFavoritesModal()">&times;</button>
+                </div>
+                <div id="favoritesList" class="modal-body">
+                    <p style="color: var(--text-light);">Aucun favori pour le moment</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Modal -->
+        <div id="historyModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>⏰ Historique de Recherche</h2>
+                    <button class="modal-close" onclick="closeHistoryModal()">&times;</button>
+                </div>
+                <div id="historyList" class="modal-body">
+                    <p style="color: var(--text-light);">Aucun historique</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications Modal -->
+        <div id="notificationsModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>🔔 Paramètres de Notifications</h2>
+                    <button class="modal-close" onclick="closeNotificationsModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="notifyNewListings" checked>
+                            Notifications pour nouvelles annonces
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="notifyPriceDrops" checked>
+                            Notifications pour baisse de prix
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="notifyMatches" checked>
+                            Notifications pour matchs de recherche
+                        </label>
+                    </div>
+                    <button class="btn btn-primary" onclick="saveNotificationSettings()">Enregistrer</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Search Form -->
         <section class="search-section">
@@ -68,6 +134,51 @@
                     </div>
                 </div>
 
+                <!-- Advanced Filters -->
+                <button id="advancedFiltersBtn" class="btn btn-secondary">⚙️ Filtres Avancés</button>
+
+                <div id="advancedFilters" class="advanced-filters hidden">
+                    <h3>Filtres Avancés</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="furnished">
+                                Meublé
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="elevator">
+                                Ascenseur
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="security">
+                                Sécurité 24/24
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="parking">
+                                Parking
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="aircon">
+                                Climatisation
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="internet">
+                                Internet
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="button-group">
                     <button id="searchBtn" class="btn btn-primary">🔍 Rechercher</button>
                     <button id="resetBtn" class="btn btn-secondary">↻ Réinitialiser</button>
@@ -83,8 +194,26 @@
             <p>Recherche en cours...</p>
         </div>
 
+        <!-- Map Section -->
+        <section class="map-section hidden" id="mapSection">
+            <h2>📍 Carte des Communes</h2>
+            <div id="communeMap" class="commune-map">
+                <!-- Map will be generated by JavaScript -->
+            </div>
+        </section>
+
         <!-- Results Section -->
         <section class="results-section">
+            <div class="results-header">
+                <h2>Résultats</h2>
+                <div class="sort-controls">
+                    <select id="sortBy" class="sort-select">
+                        <option value="recent">Plus récent</option>
+                        <option value="price-asc">Prix ↑</option>
+                        <option value="price-desc">Prix ↓</option>
+                    </select>
+                </div>
+            </div>
             <div id="resultsContainer" class="results-container">
                 <div class="no-results">
                     <p>Veuillez effectuer une recherche pour voir les résultats</p>
